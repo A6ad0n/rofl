@@ -1,0 +1,24 @@
+# Database ROFL Visualizer
+ROFL stands for Rural Oversimplification, Flaky Logic
+
+A web app to visualize PostgreSQL database tables, columns, and constraints.
+
+## Setup
+
+### Backend
+1. Navigate to `backend/`.
+2. Create a virtual environment: `python3 -m venv venv`
+3. Activate it: `source venv/bin/activate`
+4. Install dependencies: `pip install -r requirements.txt`
+5. Create a `.env` file with `DATABASE_URL=postgresql://username:password@localhost:5432/database_name`
+6. Set up PostgreSQL and run `scripts/schema.sql` to create tables.
+7. Start the server: `uvicorn app.main:app --reload`
+
+### Frontend
+1. Navigate to `frontend/`.
+2. Install dependencies: `npm install`
+3. Start the dev server: `npm run dev`
+
+## Database
+- Run `scripts/schema.sql` in PostgreSQL to create tables.
+- Optionally, run `scripts/seed.sql` to insert sample data.
