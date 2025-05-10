@@ -3,6 +3,9 @@ ROFL stands for Rural Oversimplification, Flaky Logic
 
 A web app to visualize PostgreSQL database tables, columns, and constraints.
 
+- [Manual Setup](#setup)
+- [Setup With make]($setup-with-make)
+
 ## Manual Setup
 
 ### Backend
