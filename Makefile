@@ -20,12 +20,11 @@ SCRIPTS_DIR  = ./scripts
 BACKEND_DIR  = ./backend
 FRONTEND_DIR = ./frontend
 
-USER_NAME = postgres
-DB_NAME   = metadata
-
+INIT_ENV_NAME      = init_env.sh
 CREATE_SCRIPT_NAME = createtables.sql
 FILL_SCRIPT_NAME   = filltables.sql
 
+INIT_ENV      = $(SCRIPTS_DIR)/$(INIT_ENV_NAME)
 CREATE_SCRIPT = $(SCRIPTS_DIR)/$(CREATE_SCRIPT_NAME)
 FILL_SCRIPT   = $(SCRIPTS_DIR)/$(FILL_SCRIPT_NAME)
 
@@ -33,7 +32,12 @@ VENV = $(BACKEND_DIR)/venv
 
 all: install
 
-install: install-backend install-frontend
+install: init-env install-backend install-frontend
+
+init-env:
+	@echo "Initialize PostgreSql database environment"
+	@chmod +x $(INIT_ENV)
+	@$(INIT_ENV)
 
 install-backend:
 	@echo "Installing backend dependencies..."
@@ -63,4 +67,4 @@ clean:
 	@rm -rf $(FRONTEND_DIR)/node_modules
 	@rm -rf $(FRONTEND_DIR)/dist
 
-.PHONY: all install install-backend install-frontend start-backend start-frontend start clean
+.PHONY: all install init-env install-backend install-frontend start-backend start-frontend start clean

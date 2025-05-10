@@ -3,7 +3,7 @@ ROFL stands for Rural Oversimplification, Flaky Logic
 
 A web app to visualize PostgreSQL database tables, columns, and constraints.
 
-## Setup
+## Manual Setup
 
 ### Backend
 1. Navigate to `backend/`.
@@ -19,6 +19,15 @@ A web app to visualize PostgreSQL database tables, columns, and constraints.
 2. Install dependencies: `npm install`
 3. Start the dev server: `npm run dev`
 
-## Database
+### Database
 - Run `scripts/schema.sql` in PostgreSQL to create tables.
 - Optionally, run `scripts/seed.sql` to insert sample data.
+
+## Setup With Make
+
+You can automate the setup process using make: `make install`
+
+This will prompt you for server name, database name, port, username, and password with default values provided.
+After running the make commands, your backend and frontend will be set up and ready for development.
+
+To start the app run `make start`
