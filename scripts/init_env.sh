@@ -22,3 +22,6 @@ DATABASE_URL=postgresql://${username}:${password}@${server}:${port}/${database}
 EOF
 
 echo ".env created with DATABASE_URL"
+
+export USER_NAME=$username
+export DB_NAME=$database

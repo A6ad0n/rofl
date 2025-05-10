@@ -3,8 +3,8 @@ ROFL stands for Rural Oversimplification, Flaky Logic
 
 A web app to visualize PostgreSQL database tables, columns, and constraints.
 
-- [Manual Setup](#setup)
-- [Setup With make]($setup-with-make)
+- [Manual Setup](#manual-setup)
+- [Setup With make](#setup-with-make)
 
 ## Manual Setup
 
@@ -33,4 +33,11 @@ You can automate the setup process using make: `make install`
 This will prompt you for server name, database name, port, username, and password with default values provided.
 After running the make commands, your backend and frontend will be set up and ready for development.
 
+### Database
+- Run `make db` to create and fill the tables.
+
 To start the app run `make start`
+
+### Known Bugs
+
+- Concurrent background processes in the makefile require user input, but since they run in the background, the input cannot be provided, resulting in a deadlock.

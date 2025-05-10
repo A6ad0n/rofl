@@ -9,6 +9,9 @@ export default defineConfig({
     tailwindcss(),
     react(),
   ],
+  server: {
+    port: 3000,
+  },
   base: './',
   resolve: {
     alias: {
