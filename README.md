@@ -5,6 +5,7 @@ A web app to visualize PostgreSQL database tables, columns, and constraints.
 
 - [Manual Setup](#manual-setup)
 - [Setup With make](#setup-with-make)
+- [Known Bugs](#known-bugs)
 
 ## Manual Setup
 

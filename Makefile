@@ -1,20 +1,17 @@
 ifeq ($(OS), Windows_NT)
-    PYTHON   := $(shell where python)
-    PIP      := $(shell where pip)
-    NPM      := $(shell where npm)
-	PSQL     := $(shell where psql)
-	DROPDB   := $(shell where dropdb)
-	CREATEDB := $(shell where createdb)
+	WHERE = where
 	ACTIVATE = venv\\Scripts\\activate
 else
-    PYTHON   := $(shell which python)
-    PIP      := $(shell which pip)
-    NPM      := $(shell which npm)
-	PSQL     := $(shell which psql)
-	DROPDB   := $(shell which dropdb)
-	CREATEDB := $(shell which createdb)
+	WHERE = which
 	ACTIVATE = venv/bin/activate
 endif
+
+PYTHON   := $(shell $(WHERE) python)
+PIP      := $(shell $(WHERE) pip)
+NPM      := $(shell $(WHERE) npm)
+PSQL     := $(shell $(WHERE) psql)
+DROPDB   := $(shell $(WHERE) dropdb)
+CREATEDB := $(shell $(WHERE) createdb)
 
 SCRIPTS_DIR  = ./scripts
 BACKEND_DIR  = ./backend
@@ -31,7 +28,7 @@ FILL_SCRIPT   = $(SCRIPTS_DIR)/$(FILL_SCRIPT_NAME)
 VENV = $(BACKEND_DIR)/venv
 TABLES = $(shell $(PSQL) -U $(USER_NAME) -d $(DB_NAME) -t -c "SELECT string_agg(format('%I', tablename), ', ') FROM pg_tables WHERE schemaname = 'public';" | tr -d '\n')
 
-all: install
+all: install start
 
 install: init-env install-backend install-frontend
 
@@ -56,13 +53,31 @@ start-backend:
 
 start-frontend:
 	@echo "Starting frontend React app..."
-	@cd $(FRONTEND_DIR) && $(NPM) start
+	@cd $(FRONTEND_DIR) && $(NPM) run dev
 
 start:
 	@echo "Starting backend and frontend..."
 	cd $(BACKEND_DIR) && . venv/bin/activate && (uvicorn app.main:app --reload &); 
 	cd $(FRONTEND_DIR) && $(NPM) run dev
 
+stop-process:
+ifeq ($(OS),Windows_NT)
+	@powershell -Command ^
+	"Get-CimInstance Win32_Process | ^
+	 Where-Object { \$_.CommandLine -like '*$(PROC_MATCH)*' } | ^
+	 Select-Object -First 1 | ^
+	 ForEach-Object { Stop-Process -Id \$_.ProcessId -Force }"
+else
+	@pkill -f "$(PROC_MATCH)"
+endif
+
+stop-backend:
+	@$(MAKE) stop-process PROC_MATCH="uvicorn app.main:app"
+
+stop-frontend:
+	@$(MAKE) stop-process PROC_MATCH="/bin/sh -c cd ./frontend && /opt/homebrew/bin/npm run dev"
+
+stop: stop-backend stop-frontend
 
 db: init-env reset create fill
 
@@ -87,4 +102,4 @@ clean: truncate
 	@rm -rf $(FRONTEND_DIR)/node_modules
 	@rm -rf $(FRONTEND_DIR)/dist
 
-.PHONY: all install init-env install-backend install-frontend start-backend start-frontend start clean
+.PHONY: all install init-env install-backend install-frontend start-backend start-frontend start stop-backend stop-frontend stop clean
