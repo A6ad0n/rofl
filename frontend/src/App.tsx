@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react';
-import axios from 'axios';
-import TableList from '@components/TableList';
 import type { Schema } from '@mytypes/dbSchema';
+import TableList from '@components/TableList';
 import Table from '@components/Table';
 import SchemaModal from '@components/SchemaModal';
+import { fetchSchema, fetchTables } from './api/api';
 
 const App = () => {
   const [tables, setTables] = useState<string[]>([]);
@@ -13,23 +13,16 @@ const App = () => {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    axios.get('http://localhost:8000/tables')
-      .then(res => {
-        setTables(res.data.tables);
-        setError(null);
-      })
-      .catch(err => setError(`Error fetching tables: ${err.message}`));
+    fetchTables()
+      .then(setTables)
+      .catch((err) => setError(err.message));
   }, []);
 
-  const fetchSchema = (tableName: string) => {
+  const handleTableSelect = (tableName: string) => {
     setSelectedTable(tableName);
-    setSchema(null);
-    axios.get(`http://localhost:8000/tables/${tableName}`)
-      .then(res => {
-        setSchema(res.data.schema);
-        setError(null);
-      })
-      .catch(err => setError(`Error fetching schema: ${err.message}`));
+    fetchSchema(tableName)
+      .then(setSchema)
+      .catch((err) => setError(err.message));
   };
 
   return (
@@ -40,7 +33,7 @@ const App = () => {
         <TableList
           tables={tables}
           selectedTable={selectedTable}
-          onSelect={fetchSchema}
+          onSelect={handleTableSelect}
         />
         {selectedTable !== null &&
           <Table
@@ -54,7 +47,7 @@ const App = () => {
           tableName={selectedTable!}
           schema={schema!}
           onClose={() => setIsModalOpen(false)}
-          onFKClick={fetchSchema}
+          onFKClick={handleTableSelect}
         />
       }
     </div>
