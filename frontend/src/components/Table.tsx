@@ -23,11 +23,11 @@ const Table = ({ schema, onSelect }: TableProps) => {
 	return (
 		<div 
 			style={{ width: `${tableWidth}px`, maxWidth: "100%" }}
-			onClick={onSelect}
 		>
 				{schema ? (
 					<table 
 						className="w-full border-collapse border border-gray-800"
+						onClick={onSelect}
 						style={{ fontSize: `${fontSize}px` }}
 					>
 						<tbody>

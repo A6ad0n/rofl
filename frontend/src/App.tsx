@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import TableList from '@components/TableList';
-import SchemaViewer from '@components/SchemaViewer';
 import type { Schema } from '@mytypes/dbSchema';
 import Table from '@components/Table';
 import SchemaModal from '@components/SchemaModal';
@@ -43,15 +42,18 @@ const App = () => {
           selectedTable={selectedTable}
           onSelect={fetchSchema}
         />
-        <Table
-          schema={schema}
-          onSelect={() => setIsModalOpen(true)}
-        />
+        {selectedTable !== null &&
+          <Table
+            schema={schema}
+            onSelect={() => setIsModalOpen(true)}
+          />
+        }
       </div>
       {isModalOpen && 
         <SchemaModal
+          tableName={selectedTable!}
           schema={schema!}
-          onSelect={() => setIsModalOpen(false)}
+          onClose={() => setIsModalOpen(false)}
         />
       }
     </div>
