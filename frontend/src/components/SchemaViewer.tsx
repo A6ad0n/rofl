@@ -3,9 +3,10 @@ import type { Schema } from "@mytypes/dbSchema";
 interface SchemaViewerProps {
   tableName: string | null;
   schema: Schema | null;
+  onFKClick: (tableName: string) => void;
 }
 
-const SchemaViewer = ({ tableName, schema }: SchemaViewerProps) => (
+const SchemaViewer = ({ tableName, schema, onFKClick }: SchemaViewerProps) => (
   <div className="">
     {tableName !== null && (
       <>
@@ -28,11 +29,18 @@ const SchemaViewer = ({ tableName, schema }: SchemaViewerProps) => (
                   <td className="border p-2">{col.type}</td>
                   <td className="border p-2">{col.nullable ? 'Yes' : 'No'}</td>
                   <td className="border p-2">{col.primary_key ? 'Yes' : 'No'}</td>
-                  <td className="border p-2">
-                    {col.foreign_key
-                      ? `${col.foreign_key.referenced_table}.${col.foreign_key.referenced_column}`
-                      : 'No'}
-                  </td>
+                  {col.foreign_key ?
+                    <td 
+                      className="border p-2 hover:bg-gray-600"
+                      onClick={() => onFKClick(col.foreign_key!.referenced_table)}
+                    >
+                      {col.foreign_key.referenced_table}.{col.foreign_key.referenced_column}
+                    </td> 
+                    :
+                    <td className="border p-2">
+                        No
+                    </td>
+                  }
                 </tr>
               ))}
             </tbody>

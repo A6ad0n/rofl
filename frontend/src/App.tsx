@@ -54,6 +54,7 @@ const App = () => {
           tableName={selectedTable!}
           schema={schema!}
           onClose={() => setIsModalOpen(false)}
+          onFKClick={fetchSchema}
         />
       }
     </div>

@@ -6,13 +6,12 @@ interface SchemaModalProps {
 	tableName: string;
 	schema: Schema;
 	onClose: () => void;
+	onFKClick: (tableName: string) => void;
 }
 
-//*TODO Add on CLick on ForeignKey opens another table respectively
-
-const SchemaModal = ({ tableName, schema, onClose }: SchemaModalProps) => {
+const SchemaModal = ({ tableName, schema, onClose, onFKClick }: SchemaModalProps) => {
 	const tableRef = useRef<HTMLDivElement | null>(null);
-	
+
 	useEffect(() => {
 		const handleKeyDown = (e: KeyboardEvent) => {
 			if (e.key === 'Escape')
@@ -36,7 +35,11 @@ const SchemaModal = ({ tableName, schema, onClose }: SchemaModalProps) => {
 				className="flex flex-col"
 				ref={tableRef}
 			>
-				<SchemaViewer tableName={tableName} schema={schema} />
+				<SchemaViewer 
+					tableName={tableName} 
+					schema={schema} 
+					onFKClick={onFKClick}
+				/>
 				<div className="self-end mt-[0.5em] pl-[1em] pr-[1em] align-middle rounded-xs bg-white hover:bg-white/60">
 					<button
 						className="text-black"
