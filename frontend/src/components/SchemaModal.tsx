@@ -1,6 +1,6 @@
 import type { Schema } from "@mytypes/dbSchema";
 import SchemaViewer from "@components/SchemaViewer";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 
 interface SchemaModalProps {
 	tableName: string;
@@ -11,17 +11,31 @@ interface SchemaModalProps {
 //*TODO Add on CLick on ForeignKey opens another table respectively
 
 const SchemaModal = ({ tableName, schema, onClose }: SchemaModalProps) => {
+	const tableRef = useRef<HTMLDivElement | null>(null);
+	
 	useEffect(() => {
 		const handleKeyDown = (e: KeyboardEvent) => {
-			if (e.key == 'Escape') onClose();
+			if (e.key === 'Escape')
+				onClose();
 		};
+		const handleMouseDown = (e: MouseEvent) => {
+			if (tableRef.current && !tableRef.current.contains(e.target as Node))
+				onClose();
+		}
 		document.addEventListener('keydown', handleKeyDown);
-		return () => document.removeEventListener('keydown', handleKeyDown);
+		document.addEventListener('mousedown', handleMouseDown);
+		return () => {
+			document.removeEventListener('keydown', handleKeyDown);
+			document.removeEventListener('mousedown', handleMouseDown);
+		}
 	}, [onClose]);
 
 	return (
 		<div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-			<div className="flex flex-col">
+			<div 
+				className="flex flex-col"
+				ref={tableRef}
+			>
 				<SchemaViewer tableName={tableName} schema={schema} />
 				<div className="self-end mt-[0.5em] pl-[1em] pr-[1em] align-middle rounded-xs bg-white hover:bg-white/60">
 					<button
