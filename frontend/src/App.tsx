@@ -3,10 +3,13 @@ import axios from 'axios';
 import TableList from '@components/TableList';
 import SchemaViewer from '@components/SchemaViewer';
 import type { Schema } from '@mytypes/dbSchema';
+import Table from '@components/Table';
+import SchemaModal from '@components/SchemaModal';
 
 const App = () => {
   const [tables, setTables] = useState<string[]>([]);
   const [selectedTable, setSelectedTable] = useState<string | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [schema, setSchema] = useState<Schema | null>(null);
   const [error, setError] = useState<string | null>(null);
 
@@ -40,11 +43,17 @@ const App = () => {
           selectedTable={selectedTable}
           onSelect={fetchSchema}
         />
-        <SchemaViewer
-          tableName={selectedTable}
+        <Table
           schema={schema}
+          onSelect={() => setIsModalOpen(true)}
         />
       </div>
+      {isModalOpen && 
+        <SchemaModal
+          schema={schema!}
+          onSelect={() => setIsModalOpen(false)}
+        />
+      }
     </div>
   );
 };

@@ -5,7 +5,7 @@ interface TableListProps {
 }
 
 const TableList = ({ tables, selectedTable, onSelect }: TableListProps) => (
-  <div className="w-1/4">
+  <div className="w-[30em]">
     {tables.length > 0 && (
       <>
         <h2 className="text-xl font-semibold mb-2">Tables</h2>

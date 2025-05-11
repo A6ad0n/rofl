@@ -1,11 +1,12 @@
 import type { Column, Schema } from "@mytypes/dbSchema";
-import { useState, useMemo } from "react";
+import { useMemo } from "react";
 
 interface TableProps {
   schema: Schema | null;
+	onSelect: () => void;
 }
 
-const Table = ({ schema }: TableProps) => {
+const Table = ({ schema, onSelect }: TableProps) => {
 	const fontSize = 14;
 
 	const tableWidth = useMemo(() => {
@@ -20,7 +21,10 @@ const Table = ({ schema }: TableProps) => {
 	}, [schema]);
 
 	return (
-		<div style={{ width: `${tableWidth}px`, maxWidth: "100%" }}>
+		<div 
+			style={{ width: `${tableWidth}px`, maxWidth: "100%" }}
+			onClick={onSelect}
+		>
 				{schema ? (
 					<table 
 						className="w-full border-collapse border border-gray-800"

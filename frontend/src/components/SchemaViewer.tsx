@@ -6,14 +6,14 @@ interface SchemaViewerProps {
 }
 
 const SchemaViewer = ({ tableName, schema }: SchemaViewerProps) => (
-  <div className="w-3/4 pl-4">
+  <div className="">
     {tableName !== null && (
       <>
-        <h2 className="text-xl font-semibold mb-2">Schema for {tableName}</h2>
+        <h2 className="text-xl font-semibold mb-2">{tableName}</h2>
         {schema ? (
           <table className="w-full border-collapse border">
             <thead>
-              <tr className="bg-gray-200">
+              <tr className="bg-gray-600">
                 <th className="border p-2">Column</th>
                 <th className="border p-2">Type</th>
                 <th className="border p-2">Nullable</th>
